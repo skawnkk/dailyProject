@@ -77,3 +77,27 @@
   `yarn workspace @fe/web add @fe/lib`
 - apps 서비스별 package.json의 dependencies에 @fe/lib 가 추가된 것을 확인할 수 있다.
 
+---
+
+### yarn berry의 특징
+
+- nodemodules를 사용하지 않고, .yarn폴더에 의존성들을 .zip포맷으로 압축저장한다.
+- .pnp.cjs 단일 파일에 의존성 트리정보를 저장한다.
+- zero installs: .yarn 폴더에 오프라인 캐시 zip파일들을 확인할 수 있다.
+매번 node_modules를 갱신하기 위해 yarn install을 실행하거나 개발자간 node_modules가 달라지지 않았는가 확인할 필요가 없다.
+- 때문에 IDE가 의존성, 타입정보를 node_modules가 아닌 .yarn을 바라보도록 알려주어야 한다. 
+- `ZipFS` 익스텐션 설치 : zip파일로 설치된 종속성을 읽어올 수 있도록.
+
+- 예로 typescript가 반영되지 않음을 확인할 수 있다.
+  - `yarn add -D typescript`
+  - `yarn dlx @yarnpkg/sdks vscode`
+  - typeScript버전을 사용하도록 허용한다 
+    (명령팔레트 cmd+shift+P - select typescript version - use workspace version)
+  - .vscode - extensions.json에 zipFS설치를 권장하도록 명시한다.
+
+  ```json
+  {
+    "recommendations": ["arcanis.vscode-zipfs"]
+  }
+  ```
+
