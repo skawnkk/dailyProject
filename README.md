@@ -1,4 +1,7 @@
 # yarn-berry-work
+<details>
+  <summary>1. 모노레포 설정하기</summary>
+  <div markdown="1">
 
 ### nvm 설치 
 - vscode nvm intergration 익스텐션
@@ -49,12 +52,11 @@
   
   
 ### 공통패키지 생성하기
-- packages하위 lib 프로젝트 생성,
+- packages하위 lib 프로젝트 생성 (+typescript설치, tsconfig 설정)
 - package.json 생성
   `yarn init`
   동일하게 name 변경 : ex_@fe/lib
 - root이동 > 동일하게 `yarn`실행 .pnp.cjs 업데이트
-(+typescript설치, tsconfig 설정)
 
 
 ```json
@@ -85,7 +87,8 @@
 - .pnp.cjs 단일 파일에 의존성 트리정보를 저장한다.
 - zero installs: .yarn 폴더에 오프라인 캐시 zip파일들을 확인할 수 있다.
 매번 node_modules를 갱신하기 위해 yarn install을 실행하거나 개발자간 node_modules가 달라지지 않았는가 확인할 필요가 없다.
-- 때문에 IDE가 의존성, 타입정보를 node_modules가 아닌 .yarn을 바라보도록 알려주어야 한다. 
+
+-> 때문에 IDE가 의존성, 타입정보를 node_modules가 아닌 .yarn을 바라보도록 알려주어야 한다. 
 - `ZipFS` 익스텐션 설치 : zip파일로 설치된 종속성을 읽어올 수 있도록.
 
 - 예로 typescript가 반영되지 않음을 확인할 수 있다.
@@ -100,4 +103,101 @@
     "recommendations": ["arcanis.vscode-zipfs"]
   }
   ```
+  
+  - 참고링크 yarnpkg (각 편집기의 설정을 모아둔 목록): https://yarnpkg.com/getting-started/editor-sdks
+
+  </div>
+</details>
+
+
+<details>
+<summary>2. prettier, lint, tsconfig 설정 공통화</summary>
+<div markdown="2">
+
+### root에서 eslint, prettier 설치
+  ```
+  yarn add prettier eslint eslint-config-prettier eslint-plugin-import eslint-plugin-react eslint-plugin-react-hooks eslint-import-resolver-typescript @typescript-eslint/eslint-plugin @typescript-eslint/parser -D
+
+  yarn dlx @yarnpkg/sdks
+```
+
+  - eslint-config-prettier - 불필요하거나 prettier와 충돌되는 규칙을 제외시킴
+  
+### vscode eslint, prettier 익스텐션 설치
+  - eslint와 prettier를 설치하고 나면 .vscode/extensions.json에 추천 익스텐션 추가됨 확인할 수 있다. 
+  - `esbenp.prettier-vscode`와 `dbaeumer.vscode-eslint` 설치 하기
+
+### rc 설정 및 settings.json 설정하기
+  - .prettierrc
+  - .eslintrc.js
+  - .vscode/settings.json
+ 
+ ```json
+    {
+  "search.exclude": {
+    "**/.yarn": true,
+    "**/.pnp.*": true
+  },
+  "typescript.tsdk": ".yarn/sdks/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "eslint.nodePath": ".yarn/sdks",
+  "prettier.prettierPath": ".yarn/sdks/prettier/index.js",
+
+  // 기본 포맷터 prettier로 사용
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  // 파일 저장시 formatter 실행
+  "editor.formatOnSave": true,
+  "editor.rulers": [120],
+  // lint 설정
+  "eslint.packageManager": "yarn",
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"]
+}
+```
+
+- eslint적용이 안된다면?
+  - ⌨️ command + shift + p
+  - ESLint: Restart EsLint Server 선택
+  
+### root에 설정한 rule들이 적용되도록 설정
+- 각각의 앱에 적용되어있던 .eslintrc.json 파일이 있다면 삭제해준다.
+- 🥨 공통 rule을 기반으로 사용하면서 각 앱 내 rule을 추가하여 적용하고 싶다면?
+
+### tsconfig 설정 공유하기
+- root에서 tsconfig.base.json을 생성하여 규칙을 정의
+- apps 및 packages의 tsconfig.json에서 root의 tsconfig.base.json을 확장받는다.
+
+ex) apps/fe/tsconfig.json
+```json
+
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  *** "extends": "../../tsconfig.base.json", ***
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "target": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "module": "esnext",
+    "jsx": "preserve",
+    "incremental": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
+  },
+  "exclude": ["**/node_modules", "**/.*/"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.mts",
+    "**/*.js",
+    "**/*.cjs",
+    "**/*.mjs",
+    "**/*.jsx",
+    "**/*.json"
+  ]
+}
+```
+
+  </div>
+</details>
 
