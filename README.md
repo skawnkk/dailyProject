@@ -201,3 +201,117 @@ ex) apps/fe/tsconfig.json
   </div>
 </details>
 
+<details>
+  <summary>3. react UI library 생성 및 적용</summary>
+  <div markdown='3'>
+
+  ### packages에서 ui폴더 생성
+  - `yarn init` > package.json 생성
+  - package.json name 변경 (@fe/ui)
+  - root이동하여 `yarn` 실행 > .pnp.cjs에서 app name이 변경되었는지 확인
+    
+  ### @fe/ui에 react 환경 설치
+  ```
+    yarn workspace @fe/ui add typescript react react-dom @types/node @types/react @types/react-dom -D
+  ```
+    
+  - tsconfig.json 설정
+  - UI컴포넌트 만들기
+    - src/Button.tsx
+    - src/index.ts (Button 컴포넌트를 export한다)
+  - package.json의 main 경로 설정해주기
+  ```json
+  {
+    "name": "@fe/ui",
+    "packageManager": "yarn@3.5.1",
+    "main": "src/index.ts", -> *ui 모듈을 import해오는 경로 설정
+    "devDependencies": {
+      "@types/node": "^18.16.3",
+      "@types/react": "^18.2.4",
+      "@types/react-dom": "^18.2.3",
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0",
+      "typescript": "^5.0.4"
+    },
+    "scripts": {
+      "typecheck": "tsc --project ./tsconfig.json --noEmit"
+    }
+  }
+```
+    
+### @fe/app에서 @fe/ui 모듈을 사용할 수 있도록 적용하기
+root에서 실행
+```
+yarn workspace @fe/app add @fe/ui  
+```
+apps/fe-app의 packages.json dependencies에 @fe/ui가 추가되는 것을 확인
+
+    
+### typescript transpilation
+모듈로 import해온 컴포넌트의 타입들이 브라우저에서 읽혀지지 않아서 오류가 생긴다.
+브라우저가 타입스크립트를 해석할 수 있도록 javascript로 transpilation이 필요하다.
+nextConfig에서 설정할 수 있다. (built-in module transpilation :https://nextjs.org/blog/next-13-1#built-in-module-transpilation-stable)
+    
+```js
+/** @type {import('next').NextConfig} */
+
+const nextConfig = {
+  reactStrictMode: true,
+  transpilePackages: ['@fe/ui'], //*<-사용하고자 하는 패키지를 등록해준다.
+}
+
+module.exports = nextConfig
+
+```
+  </div>
+</details>
+  
+  
+<details>
+  <summary>4. type검사하기</summary>
+  <div markdown='4'>
+    
+패키지 라이브러리에서의 타입변환이 발생했다면,
+이 패키지를 사용하고 있는 곳에서 타입에러가 생기지 않을지 확인이 필요하다.
+    
+### 각 앱에서 타입체크하기
+- 앱의 package.json에서 script 추가
+ ```json
+ "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "typecheck": "tsc --project ./tsconfig.json --noEmit" //<-추가
+  }, 
+```
+                                                                 
+- 커맨드실행하기
+```
+yarn workspace @fe/web typecheck
+```
+      
+                                                                 
+### global하게 typecheck하기
+
+앱을 실행시키지않더라도 타입을 확인할 수 있는 방법이다
+- root의 package.json에 script작성
+                                                                 
+```json
+  "scripts": {
+    "g:typecheck": "yarn workspaces foreach -pv run typecheck"
+  },
+```
+                                                                 
+  - `g`:global하게 typecheck실행
+  - `yarn workspaces foreach`
+     - p : parallel  병행으로
+     - v : 출력라인에 작업공간이름을 붙임
+     - 기타 옵션값 확인 : https://yarnpkg.com/cli/workspaces/foreach
+- root에서 명령어실행
+```
+yarn g:typecheck
+```
+ </div>
+</details>
+
