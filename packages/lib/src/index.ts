@@ -1,3 +1,3 @@
-export const sayHello = () => {
-  return "hello from lib";
-};
+export const sayHello = (arrival = 'lib') => {
+  return `hello from ${arrival}`
+}
