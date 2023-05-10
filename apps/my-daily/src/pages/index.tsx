@@ -10,7 +10,8 @@ export default function Home() {
   return (
     <main className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}>
       <h1>{sayHello('@my')}</h1>
-      <Button onClick={handleClick}>myButton</Button>
+      <Button onClick={handleClick}>myButton</Button
+      <div>githubActions</div>
     </main>
   )
 }
