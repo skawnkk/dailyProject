@@ -27,6 +27,6 @@ jobs:
         uses: ./.github/actions/yarn-install
 
       - name: Build web-app
-        working-directory: apps/wanted
+        working-directory: apps/my-daily
         run: |
           yarn build
