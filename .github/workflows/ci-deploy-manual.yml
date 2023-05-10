@@ -6,10 +6,10 @@ on:
       service_name:
         description: '배포할 서비스명을 선택해주세요.'
         required: true
-        default: 'wanted'
+        default: 'my-daily'
         type: choice
         options:
-          - wanted
+          - my-daily
           - admin
 
 jobs:
