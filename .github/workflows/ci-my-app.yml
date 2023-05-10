@@ -1,0 +1,32 @@
+name: CI-wanted-app
+
+# on: 언제 githubActions를 실행시킬것인가
+# change-check 브랜치가 push되었을 경우, paths에 변경이 있는 경우
+on:
+  push:
+    branches:
+      - change-check
+    paths:
+      - 'apps/my-daily/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-install
+
+      - name: Build web-app
+        working-directory: apps/wanted
+        run: |
+          yarn build
