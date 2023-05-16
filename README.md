@@ -314,4 +314,103 @@ yarn g:typecheck
 ```
  </div>
 </details>
+  
+<details>
+<summary>5. github actions 배포</summary>
+<div markdown='5'>
+  
+### workflow
+  - github내 이벤트 발생에 대해 하나 이상의 작업을 실행시키는 자동화된 프로세스
+
+  
+### github/actions/yarn-install yml 생성
+```yml
+#공통설정 (apps workflows에서 공통으로 사용하게 된다)
+  
+name: 'Monorepo install (yarn)'
+description: 'Run yarn install'
+
+runs:
+  using: 'composite'
+  
+  # step - 만들어진 action을 실행하거나 shell script를 실행하는 곳
+  steps:
+    - name: Expose yarn config as "$GITHUB_OUTPUT"
+      id: yarn-config
+      shell: bash
+      run: |
+        echo "CACHE_FOLDER=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
+
+  # 지정한 path에 지정 key값으로 cache가 되어있는지 확인한다.
+    - name: Restore yarn cache
+      uses: actions/cache@v3
+      id: yarn-download-cache
+      with:
+        path: ${{ steps.yarn-config.outputs.CACHE_FOLDER }}
+        key: yarn-download-cache-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          yarn-download-cache-
+  
+    - name: Restore yarn install state
+      id: yarn-install-state-cache
+      uses: actions/cache@v3
+      with:
+        path: .yarn/ci-cache/
+        key: ${{ runner.os }}-yarn-install-state-cache-${{ hashFiles('yarn.lock', '.yarnrc.yml') }}
+
+  # 확인 후 yarn.lock에서 상태변경이 있는 경우에 yarn install을 실행하도록 한다. 
+    - name: Install dependencies
+      shell: bash
+      run: |
+        yarn install --immutable --inline-builds
+      env:
+        YARN_ENABLE_GLOBAL_CACHE: 'false'
+        YARN_INSTALL_STATE_PATH: .yarn/ci-cache/install-state.gz # Very small speedup when lock does not change
+
+```
+  
+  
+### github/workflows/fe yml 생성
+  
+```yml
+name: CI-FE-app
+
+// *on: workflow를 동작하게하는 trigger
+// change-check 브랜치의 'apps/fe/**' 경로에서 수정이 발생하여 push되었을 경우 workflow가 동작한다.
+  
+on:
+  push:
+    branches:
+      - change-check
+    paths:
+      - 'apps/fe/**'
+
+jobs:
+  test:
+    // 리눅스 환경에서 실행하는 경우
+    runs-on: ubuntu-latest 
+    strategy:
+      matrix:
+        node-version: [16.x]
+  
+    steps:
+      // 리눅스환경에 checkout한 후 action을 실행한다. (uses) 
+      - uses: actions/checkout@v3
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          //  strategy에서 만들어 놓은 변수를 사용할수도 있고
+          //  GitHub설정의 Secrets에 저장해둔 변수를 ${{ secrets.XXX }}라는 값으로 사용할 수 있다.
+  
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-install
+
+      - name: Build web-app
+        working-directory: apps/fe
+        run: |
+          yarn build
+```
+</div>
+</details>
 
