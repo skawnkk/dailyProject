@@ -319,11 +319,12 @@ yarn g:typecheck
 <summary>5. github actions 배포</summary>
 <div markdown='5'>
   
-### workflow
+### 1. workflow 방식
   - github내 이벤트 발생에 대해 하나 이상의 작업을 실행시키는 자동화된 프로세스
 
+<details>
+<summary>github/actions/yarn-install yml 생성</summary>
   
-### github/actions/yarn-install yml 생성
 ```yml
 #공통설정 (apps workflows에서 공통으로 사용하게 된다)
   
@@ -340,7 +341,8 @@ runs:
       shell: bash
       run: |
         echo "CACHE_FOLDER=$(yarn config get cacheFolder)" >> $GITHUB_OUTPUT
-
+  
+  # 매번 빌드할때마다 yarn install을 실행하면 시간이 소요되므로 cache를 통해 변경점이 확인될 경우만 설치하기 위함
   # 지정한 path에 지정 key값으로 cache가 되어있는지 확인한다.
     - name: Restore yarn cache
       uses: actions/cache@v3
@@ -368,15 +370,17 @@ runs:
         YARN_INSTALL_STATE_PATH: .yarn/ci-cache/install-state.gz # Very small speedup when lock does not change
 
 ```
+</details>
   
-  
-### github/workflows/fe yml 생성
+
+<details>
+<summary>github/workflows/fe yml</summary>  
   
 ```yml
 name: CI-FE-app
 
-// *on: workflow를 동작하게하는 trigger
-// change-check 브랜치의 'apps/fe/**' 경로에서 수정이 발생하여 push되었을 경우 workflow가 동작한다.
+# *on: workflow를 동작하게하는 trigger
+# change-check 브랜치의 'apps/fe/**' 경로에서 수정이 발생하여 push되었을 경우 workflow가 동작한다.
   
 on:
   push:
@@ -387,22 +391,23 @@ on:
 
 jobs:
   test:
-    // 리눅스 환경에서 실행하는 경우
+    # 리눅스 환경에서 실행하는 경우
     runs-on: ubuntu-latest 
     strategy:
       matrix:
         node-version: [16.x]
   
     steps:
-      // 리눅스환경에 checkout한 후 action을 실행한다. (uses) 
+      # 리눅스환경에 checkout한 후 action을 실행한다. (uses) 
       - uses: actions/checkout@v3
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          //  strategy에서 만들어 놓은 변수를 사용할수도 있고
-          //  GitHub설정의 Secrets에 저장해둔 변수를 ${{ secrets.XXX }}라는 값으로 사용할 수 있다.
-  
+          # strategy에서 만들어 놓은 변수를 사용할수도 있고
+          # GitHub설정의 Secrets에 저장해둔 변수를 ${{ secrets.XXX }}라는 값으로 사용할 수 있다.
+      
+  # 공통파일 yarn install을 실행한다
       - name: 📥 Monorepo install
         uses: ./.github/actions/yarn-install
 
@@ -411,6 +416,57 @@ jobs:
         run: |
           yarn build
 ```
+</details>
+  
+### 2.githubActions에서 gui방식으로 CICD 
+  
+<details>
+<summary>.github/workflows/ci-deploy-manual.yml 생성</summary>
+  
+```yml
+name: CI-deploy-manual
+
+on:
+  workflow_dispatch:
+    inputs:
+      service_name:
+        description: '배포할 서비스명을 선택해주세요.'
+        required: true
+        default: 'my-daily'
+        type: choice
+        options:
+          - my-daily
+          - admin
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    # 리눅스 환경으로 체크아웃!
+    steps:
+      - uses: actions/checkout@v3
+    # 노드를 깔자
+    steps:
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: 📥 Monorepo install
+        uses: ./.github/actions/yarn-install
+
+      - name: Build web-app
+        working-directory: apps/${{ inputs.service_name }}
+        run: |
+          yarn build
+```
+- github에서 기본 브랜치를 배포대상인 branch로 이동한다. (위의 경우에는 change-check)
+- github actions에서 CI-deploy-manual을 확인해본다.
+  ![image](https://github.com/skawnkk/monorepo-settings/assets/65053955/34cf9004-fa7d-49b7-b7b9-a2bd390acffe)
+</details>
+  
 </div>
 </details>
 
