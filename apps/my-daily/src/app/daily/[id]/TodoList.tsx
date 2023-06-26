@@ -1,20 +1,32 @@
+import {useParams} from 'next/navigation'
 import React from 'react'
+import {useUpdateTodo} from '../../../api/daily'
 import {YN} from '../../../types/daily'
 
 interface TodoListType {
-  list: Array<{idx: number; todo: string; checked: YN}>
+  list: Array<{todo_id: string; todo: string; done: YN}>
 }
 
 function TodoList({list}: TodoListType) {
-  const onChangeCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked)
+  const {id: dailyId} = useParams()
+  const mutation = useUpdateTodo(dailyId)
+  const onChangeCheck = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.checked, id)
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    mutation.mutate({todoId: id, value: e.target.checked ? 'Y' : 'N'})
   }
 
   return (
     <div>
       {list.map(li => (
-        <div key={li.idx}>
-          <input type="checkbox" id={li.todo} name={li.todo} checked={li.checked === YN.Y} onChange={onChangeCheck} />
+        <div key={li.todo_id}>
+          <input
+            type="checkbox"
+            id={li.todo}
+            name={li.todo}
+            checked={li.done === YN.Y}
+            onChange={onChangeCheck(li.todo_id)}
+          />
           <label htmlFor={li.todo}>{li.todo}</label>
         </div>
       ))}

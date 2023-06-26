@@ -18,7 +18,7 @@ function MonthlyPage() {
     <div>
       {monthlyList.map(list => {
         const {month, date} = getDate(new Date(list.date))
-        return <div key={list.id} onClick={goDailyPage(list.id)}>{`${month}월 ${date}일`}</div>
+        return <div key={list.daily_id} onClick={goDailyPage(list.daily_id)}>{`${month}월 ${date}일`}</div>
       })}
     </div>
   )
