@@ -1,35 +1,39 @@
 'use client'
-import {useQuery} from '@tanstack/react-query'
+import {useParams} from 'next/navigation'
 import React from 'react'
-import {YN} from '../../../types/daily'
+import {useGetDaily} from '../../../api/daily'
 import TodoList from './TodoList'
-const getDaily = (id: string) => {
-  return {
-    id,
-    updateDate: {date: '2023-06-20', use: YN.Y},
-    todoList: [
-      {idx: 123, todo: '책 30분 읽기', checked: YN.N},
-      {idx: 124, todo: '방 청소', checked: YN.Y},
-    ],
-  }
-}
+// const getDaily = (id: string) => {
+//   return {
+//     id,
+//     updateDate: {date: '2023-06-20', use: YN.Y},
+//     todoList: [
+//       {idx: 123, todo: '책 30분 읽기', checked: YN.N},
+//       {idx: 124, todo: '방 청소', checked: YN.Y},
+//     ],
+//     timetable:[{time:'10:00-11:00', content:'아침먹음'},{time:'11:00-12:00', content:'아침먹음'}]
+//     memo: '아자'
+//   }
+// }
 
-function DailyPage({params: {id}}: {params: {id: string}}) {
-  const query = useQuery({queryKey: ['daily'], queryFn: () => getDaily(id)})
-  if (!query.isSuccess) {
-    return <div>loading</div>
+function DailyPage() {
+  const {id} = useParams()
+  const {isSuccess, data} = useGetDaily(id)
+  if (!isSuccess) {
+    return <div>error...</div>
   }
-  const {updateDate, todoList} = query.data
-  console.log(todoList)
+
+  const {date, todos} = data
+
   return (
     <div>
       <div className={'flex'}>
         <p>날짜</p>
-        <p>{updateDate.date}</p>
+        <p>{date}</p>
       </div>
       <div className={'flex'}>
         <p>해야할 일</p>
-        {!todoList.length ? <div>일정이 없습니다</div> : <TodoList list={todoList} />}
+        {!todos.length ? <div>일정이 없습니다</div> : <TodoList list={todos} />}
       </div>
     </div>
   )
