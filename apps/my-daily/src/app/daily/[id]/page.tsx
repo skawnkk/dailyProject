@@ -3,18 +3,6 @@ import {useParams} from 'next/navigation'
 import React from 'react'
 import {useGetDaily} from '../../../api/daily'
 import TodoList from './TodoList'
-// const getDaily = (id: string) => {
-//   return {
-//     id,
-//     updateDate: {date: '2023-06-20', use: YN.Y},
-//     todoList: [
-//       {idx: 123, todo: '책 30분 읽기', checked: YN.N},
-//       {idx: 124, todo: '방 청소', checked: YN.Y},
-//     ],
-//     timetable:[{time:'10:00-11:00', content:'아침먹음'},{time:'11:00-12:00', content:'아침먹음'}]
-//     memo: '아자'
-//   }
-// }
 
 function DailyPage() {
   const {id} = useParams()
