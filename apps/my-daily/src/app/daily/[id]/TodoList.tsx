@@ -11,8 +11,6 @@ function TodoList({list}: TodoListType) {
   const {id: dailyId} = useParams()
   const mutation = useUpdateTodo(dailyId)
   const onChangeCheck = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.checked, id)
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     mutation.mutate({todoId: id, value: e.target.checked ? 'Y' : 'N'})
   }
 
@@ -24,7 +22,7 @@ function TodoList({list}: TodoListType) {
             type="checkbox"
             id={li.todo}
             name={li.todo}
-            checked={li.done === YN.Y}
+            checked={li.done === 'Y'}
             onChange={onChangeCheck(li.todo_id)}
           />
           <label htmlFor={li.todo}>{li.todo}</label>

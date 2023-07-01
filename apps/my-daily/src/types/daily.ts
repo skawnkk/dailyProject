@@ -1,7 +1,4 @@
-export enum YN {
-  Y = 'Y',
-  N = 'N',
-}
+export type YN = 'Y' | 'N'
 
 export interface Daily {
   daily_id: string
