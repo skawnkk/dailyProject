@@ -9,12 +9,12 @@ export interface Daily {
   problem: string | null
   try: string | null
   memo: string | null
-  todos: Todos[]
+  todos: Todo[]
   todo: string
   todo_id: string
 }
 
-export type Todos = {
+export type Todo = {
   todo_id: string
   todo: string
   done: YN
