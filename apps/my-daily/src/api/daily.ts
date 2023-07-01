@@ -1,9 +1,9 @@
 import {UseQueryResult, useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
-import {Daily} from '../types/daily'
+import {Daily, Todo, YN} from '../types/daily'
 import {api} from './api'
 import {dailyKeys} from './queryKey'
 
-export const useGetDaily = (id: string): UseQueryResult<Daily> => {
+export const useGetDaily = (id: Daily['daily_id']): UseQueryResult<Daily> => {
   return useQuery(dailyKeys.detail(id), async () => {
     const data = await api.get(`/schedule/daily/${id}`)
     return data.json()
@@ -13,14 +13,14 @@ export const useGetDaily = (id: string): UseQueryResult<Daily> => {
 export const useUpdateTodo = (dailyId: string) => {
   const queryClient = useQueryClient()
   const mutation = useMutation({
-    mutationFn: ({todoId, value}: {todoId: string; value: string}) => {
+    mutationFn: ({todoId, value}: {todoId: Todo['todoId']; value: YN}) => {
       return api.post(`/schedule/daily/${dailyId}/todo`, {todoId, value})
     },
     onMutate: async data => {
       const {todoId, value} = data
       const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
       const updatedTodos = previousData.todos.map(todo => {
-        return todo.todo_id === todoId ? {...todo, done: value} : todo
+        return todo.todoId === todoId ? {...todo, done: value} : todo
       })
       queryClient.setQueryData(dailyKeys.detail(todoId), (prev: Daily) => ({...prev, todos: updatedTodos}))
       return {previousData}

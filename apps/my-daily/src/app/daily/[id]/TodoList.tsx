@@ -1,13 +1,9 @@
 import {useParams} from 'next/navigation'
 import React from 'react'
 import {useUpdateTodo} from '../../../api/daily'
-import {YN} from '../../../types/daily'
+import {Daily} from '../../../types/daily'
 
-interface TodoListType {
-  list: Array<{todo_id: string; todo: string; done: YN}>
-}
-
-function TodoList({list}: TodoListType) {
+function TodoList({list}: {list: Daily['todos']}) {
   const {id: dailyId} = useParams()
   const mutation = useUpdateTodo(dailyId)
   const onChangeCheck = (id: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -17,13 +13,13 @@ function TodoList({list}: TodoListType) {
   return (
     <div>
       {list.map(li => (
-        <div key={li.todo_id}>
+        <div key={li.todoId}>
           <input
             type="checkbox"
             id={li.todo}
             name={li.todo}
             checked={li.done === 'Y'}
-            onChange={onChangeCheck(li.todo_id)}
+            onChange={onChangeCheck(li.todoId)}
           />
           <label htmlFor={li.todo}>{li.todo}</label>
         </div>

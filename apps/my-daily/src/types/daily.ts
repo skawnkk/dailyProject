@@ -11,11 +11,11 @@ export interface Daily {
   memo: string | null
   todos: Todo[]
   todo: string
-  todo_id: string
+  todoId: string
 }
 
 export type Todo = {
-  todo_id: string
+  todoId: string
   todo: string
   done: YN
 }
