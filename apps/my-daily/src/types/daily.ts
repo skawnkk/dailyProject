@@ -3,7 +3,7 @@ export type YN = 'Y' | 'N'
 export interface Daily {
   daily_id: string
   member_id: string
-  date: string
+  date: Date
   done: YN
   keep: string | null
   problem: string | null
