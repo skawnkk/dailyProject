@@ -1,24 +1,35 @@
-export enum YN {
-  Y = 'Y',
-  N = 'N',
-}
+export type YN = 'Y' | 'N'
 
 export interface Daily {
   daily_id: string
   member_id: string
-  date: string
+  date: Date
   done: YN
   keep: string | null
   problem: string | null
   try: string | null
   memo: string | null
-  todos: Todos[]
+  todos: Todo[]
   todo: string
-  todo_id: string
+  todoId: string
 }
 
-export type Todos = {
-  todo_id: string
+export type Todo = {
+  todoId: string
   todo: string
   done: YN
+}
+
+export interface Daily {
+  daily_id: string
+  member_id: string
+  date: Date
+  done: YN
+  keep: string | null
+  problem: string | null
+  try: string | null
+  memo: string | null
+  todos: Todo[]
+  todo: string
+  todo_id: string
 }
