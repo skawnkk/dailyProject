@@ -12,4 +12,12 @@ export const api = {
       body: JSON.stringify(body),
     })
   },
+  delete: async (url: string) => {
+    return fetch(baseUrl + url, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+  },
 }
