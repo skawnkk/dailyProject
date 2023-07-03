@@ -38,8 +38,10 @@ function DailyPage() {
       </div>
       <div className={'flex'}>
         <p>해야할 일</p>
-        {!todos?.length ? <div>일정이 없습니다</div> : <TodoList list={todos} />}
-        <TodoInput />
+        <div>
+          {!todos?.length ? <div>일정이 없습니다</div> : <TodoList list={todos} />}
+          <TodoInput />
+        </div>
       </div>
       <div className={'flex'}>
         <p>시간체크</p>
