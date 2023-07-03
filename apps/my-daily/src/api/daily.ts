@@ -10,6 +10,24 @@ export const useGetDaily = (id: Daily['daily_id']): UseQueryResult<Daily> => {
   })
 }
 
+export const useCreateTodo = (dailyId: string) => {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (todo: string) => {
+      return api.post(`/schedule/daily/${dailyId}/todo/add`, {todo})
+    },
+    onError: () => {
+      const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
+      queryClient.setQueryData(dailyKeys.detail(dailyId), previousData)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({queryKey: dailyKeys.detail(dailyId)})
+    },
+  })
+
+  return mutation
+}
+
 export const useUpdateTodo = (dailyId: string) => {
   const queryClient = useQueryClient()
   const mutation = useMutation({

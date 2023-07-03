@@ -3,6 +3,7 @@ import {useParams} from 'next/navigation'
 import React from 'react'
 import {useGetDaily} from '../../../api/daily'
 import {getDate} from '../../../utils/date'
+import TodoInput from './TodoInput'
 import TodoList from './TodoList'
 
 function DailyPage() {
@@ -22,7 +23,8 @@ function DailyPage() {
       </div>
       <div className={'flex'}>
         <p>해야할 일</p>
-        {!todos.length ? <div>일정이 없습니다</div> : <TodoList list={todos} />}
+        {!todos?.length ? <div>일정이 없습니다</div> : <TodoList list={todos} />}
+        <TodoInput />
       </div>
     </div>
   )
