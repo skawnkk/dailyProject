@@ -17,7 +17,7 @@ function DailyPage() {
   }
   const {date: dailyDate, keep, problem, try: tryData, todos, schedule} = data
   const {month, date} = getDate(new Date(dailyDate))
-  const timeTable = Object.keys(schedule)
+
   return (
     <div>
       <div className={'flex'}>
