@@ -3,8 +3,10 @@ import {useRouter, useParams} from 'next/navigation'
 import React from 'react'
 import {useGetDaily} from '../../../api/daily'
 import {getDate} from '../../../utils/date'
+import Timetable from './Timetable'
 import TodoInput from './TodoInput'
 import TodoList from './TodoList'
+
 function DailyPage() {
   const {id} = useParams()
   const router = useRouter()
@@ -45,16 +47,7 @@ function DailyPage() {
       </div>
       <div className={'flex'}>
         <p>시간체크</p>
-        <div>
-          {Object.keys(schedule).map((time: string) => {
-            return (
-              <div key={time} className="flex">
-                <p>{time}</p>
-                <p>{schedule[time]}</p>
-              </div>
-            )
-          })}
-        </div>
+        <Timetable schedules={schedule} />
       </div>
     </div>
   )
