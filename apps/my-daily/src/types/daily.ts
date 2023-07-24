@@ -12,6 +12,7 @@ export interface Daily {
   todos: Todo[]
   todo: string
   todoId: string
+  schedule: {[key: string]: string | null}
 }
 
 export type Todo = {

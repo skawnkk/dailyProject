@@ -1,22 +1,25 @@
 import {useParams} from 'next/navigation'
-import React from 'react'
 import {useCreateTodo} from '../../../api/daily'
-import {useInput} from '../../../hooks/useInput'
 
 function TodoInput() {
   const {id} = useParams()
   const {mutate} = useCreateTodo(id)
-  const {value, onChange} = useInput()
-  const addTodo = () => {
+  const addTodo = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const value = e.target[0].value
+    if (!value) {
+      return
+    }
     mutate(value)
+    e.target[0].value = ''
   }
-  const handleKeyDown = (e: React.ChangeEvent<HTMLInputElement>) => {
-    onChange(e.target.value)
-  }
+
   return (
     <div>
-      <input value={value} placeholder="오늘 해야 할 일을 입력하세요." onChange={handleKeyDown} />
-      <button onClick={addTodo}>+</button>
+      <form onSubmit={addTodo}>
+        <input placeholder="오늘 해야 할 일을 입력하세요." />
+        <button type="submit">+</button>
+      </form>
     </div>
   )
 }
