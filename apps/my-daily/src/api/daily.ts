@@ -53,3 +53,45 @@ export const useUpdateTodo = (dailyId: string) => {
 
   return mutation
 }
+
+export const useDeleteTodo = (dailyId: string) => {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: (todoId: Todo['todoId']) => {
+      return api.delete(`/schedule/daily/${todoId}/todo/delete`)
+    },
+    onMutate: async () => {
+      const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
+      return {previousData}
+    },
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(dailyKeys.detail(context?.previousData?.daily_id || ''), context?.previousData)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({queryKey: dailyKeys.detail(dailyId)})
+    },
+  })
+
+  return mutation
+}
+
+export const useUpdateSchedule = (dailyId: string) => {
+  const queryClient = useQueryClient()
+  const mutation = useMutation({
+    mutationFn: ({time, schedule}: {time: string; schedule: string}) => {
+      return api.post(`/schedule/daily/${dailyId}/schedule`, {time: `${time}:00`, schedule})
+    },
+    onMutate: async () => {
+      const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
+      return {previousData}
+    },
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(dailyKeys.detail(context?.previousData?.daily_id || ''), context?.previousData)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({queryKey: dailyKeys.detail(dailyId)})
+    },
+  })
+
+  return mutation
+}
