@@ -1,7 +1,7 @@
 import {useParams} from 'next/navigation'
-import {useEffect, useRef} from 'react'
+import {useRef} from 'react'
 import {useUpdateSchedule} from '../../../api/daily'
-import {Daily, Time} from '../../../types/daily'
+import {Daily} from '../../../types/daily'
 
 type ScheduleTimeType = {
   time: string
@@ -63,12 +63,6 @@ const TimeCell = ({time, task}: {time: string; task: string}) => {
   const updateSchedule = () => {
     mutation.mutate({time, schedule: ref.current?.value || ''})
   }
-
-  useEffect(() => {
-    // document.addEventListener('click', updateSchedule)
-    // return () => document.removeEventListener('click', updateSchedule)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <div>
