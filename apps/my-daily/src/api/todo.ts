@@ -1,7 +1,14 @@
-import {useMutation, useQueryClient} from '@tanstack/react-query'
+import {UseQueryResult, useMutation, useQuery, useQueryClient} from '@tanstack/react-query'
 import {Daily, Todo, YN} from '../types/daily'
 import {api} from './api'
-import {dailyKeys} from './queryKey'
+import {todoKeys} from './queryKey'
+
+export const useGetTodo = (dailyId: string): UseQueryResult<Todo[]> => {
+  return useQuery(todoKeys.get(dailyId), async () => {
+    const data = await api.get(`/todo/${dailyId}`)
+    return data.json()
+  })
+}
 
 export const useCreateTodo = (dailyId: string) => {
   const queryClient = useQueryClient()
@@ -10,11 +17,11 @@ export const useCreateTodo = (dailyId: string) => {
       return api.post(`/todo/${dailyId}`, {todo})
     },
     onError: () => {
-      const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
-      queryClient.setQueryData(dailyKeys.detail(dailyId), previousData)
+      const previousData = queryClient.getQueryData(todoKeys.get(dailyId)) as Daily
+      queryClient.setQueryData(todoKeys.get(dailyId), previousData)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({queryKey: dailyKeys.detail(dailyId)})
+      queryClient.invalidateQueries({queryKey: todoKeys.get(dailyId)})
     },
   })
 
@@ -29,18 +36,18 @@ export const useUpdateTodo = (dailyId: string) => {
     },
     onMutate: async data => {
       const {todoId, value} = data
-      const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
+      const previousData = queryClient.getQueryData(todoKeys.get(dailyId)) as Daily
       const updatedTodos = previousData.todos.map(todo => {
         return todo.todoId === todoId ? {...todo, done: value} : todo
       })
-      queryClient.setQueryData(dailyKeys.detail(todoId), (prev: Daily) => ({...prev, todos: updatedTodos}))
+      queryClient.setQueryData(todoKeys.get(todoId), (prev: Daily) => ({...prev, todos: updatedTodos}))
       return {previousData}
     },
     onError: (err, newTodo, context) => {
-      queryClient.setQueryData(dailyKeys.detail(context?.previousData?.daily_id || ''), context?.previousData)
+      queryClient.setQueryData(todoKeys.get(context?.previousData?.daily_id || ''), context?.previousData)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({queryKey: dailyKeys.detail(dailyId)})
+      queryClient.invalidateQueries({queryKey: todoKeys.get(dailyId)})
     },
   })
 
@@ -54,14 +61,14 @@ export const useDeleteTodo = (dailyId: string) => {
       return api.delete(`/todo/${todoId}`)
     },
     onMutate: async () => {
-      const previousData = queryClient.getQueryData(dailyKeys.detail(dailyId)) as Daily
+      const previousData = queryClient.getQueryData(todoKeys.get(dailyId)) as Daily
       return {previousData}
     },
     onError: (err, newTodo, context) => {
-      queryClient.setQueryData(dailyKeys.detail(context?.previousData?.daily_id || ''), context?.previousData)
+      queryClient.setQueryData(todoKeys.get(context?.previousData?.daily_id || ''), context?.previousData)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({queryKey: dailyKeys.detail(dailyId)})
+      queryClient.invalidateQueries({queryKey: todoKeys.get(dailyId)})
     },
   })
 

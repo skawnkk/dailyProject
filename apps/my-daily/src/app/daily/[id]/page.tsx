@@ -2,6 +2,7 @@
 import {useRouter} from 'next/navigation'
 import React from 'react'
 import {useGetDaily} from '../../../api/daily'
+import {useGetTodo} from '../../../api/todo'
 import {getDate} from '../../../utils/date'
 import Timetable from './Timetable'
 import TodoInput from './TodoInput'
@@ -14,18 +15,18 @@ interface Props {
 }
 function DailyPage({params}: Props) {
   const {id} = params
-
   const router = useRouter()
   const {isSuccess, data} = useGetDaily(id)
+  const {data: todos} = useGetTodo(id)
+  console.log(todos)
   if (!isSuccess) {
     return <div>error...</div>
   }
   if (!data) {
     router.push('/monthly')
   }
-  const {date: dailyDate, keep, problem, try: tryData, todos, schedule} = data
+  const {date: dailyDate, keep, problem, try: tryData, schedule} = data
   const {month, date} = getDate(new Date(dailyDate))
-
   return (
     <div>
       <div className={'flex'}>

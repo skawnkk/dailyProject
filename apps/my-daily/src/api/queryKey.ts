@@ -1,3 +1,7 @@
 export const dailyKeys = {
-  detail: (id: string) => ['daily', id],
+  detail: (dailyId: string) => ['daily', dailyId],
+}
+
+export const todoKeys = {
+  get: (dailyId: string) => ['todo', dailyId],
 }
