@@ -1,5 +1,5 @@
 import {useParams} from 'next/navigation'
-import {useCreateTodo} from '../../../api/daily'
+import {useCreateTodo} from '../../../api/todo'
 
 function TodoInput() {
   const {id} = useParams()

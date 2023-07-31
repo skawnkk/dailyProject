@@ -1,6 +1,6 @@
 import {useParams} from 'next/navigation'
 import React from 'react'
-import {useUpdateTodo, useDeleteTodo} from '../../../api/daily'
+import {useDeleteTodo, useUpdateTodo} from '../../../api/todo'
 import {Daily} from '../../../types/daily'
 
 function TodoList({list}: {list: Daily['todos']}) {
