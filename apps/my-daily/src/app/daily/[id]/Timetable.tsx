@@ -29,7 +29,6 @@ const getTimeByType = (hourly: boolean) => {
 
 function Timetable({schedules, hourly}: {schedules: Daily['schedule']; hourly: boolean}) {
   const time = getTimeByType(hourly)
-
   return (
     <div>
       {time.map(item => {

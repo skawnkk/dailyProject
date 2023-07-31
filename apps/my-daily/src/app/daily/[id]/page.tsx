@@ -1,5 +1,5 @@
 'use client'
-import {useRouter, useParams} from 'next/navigation'
+import {useRouter} from 'next/navigation'
 import React from 'react'
 import {useGetDaily} from '../../../api/daily'
 import {getDate} from '../../../utils/date'
@@ -7,8 +7,14 @@ import Timetable from './Timetable'
 import TodoInput from './TodoInput'
 import TodoList from './TodoList'
 
-function DailyPage() {
-  const {id} = useParams()
+interface Props {
+  params: {
+    id: string
+  }
+}
+function DailyPage({params}: Props) {
+  const {id} = params
+
   const router = useRouter()
   const {isSuccess, data} = useGetDaily(id)
   if (!isSuccess) {
@@ -47,7 +53,7 @@ function DailyPage() {
       </div>
       <div className={'flex'}>
         <p>시간체크</p>
-        <Timetable schedules={schedule} />
+        <Timetable schedules={schedule} hourly={false} />
       </div>
     </div>
   )
