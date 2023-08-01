@@ -246,10 +246,12 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@tanstack/eslint-plugin-query", "npm:4.29.9"],\
             ["@tanstack/react-query", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:4.29.12"],\
             ["@tanstack/react-query-devtools", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:4.29.13"],\
+            ["@tanstack/react-table", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:8.9.3"],\
             ["@types/node", "npm:18.16.3"],\
             ["@types/react", "npm:18.2.0"],\
             ["@types/react-dom", "npm:18.2.1"],\
             ["autoprefixer", "virtual:62697cc128050233f6d429f5d42ee96bd3a5dd3221834aff037ebe1a7bb46a881721859a374aa34c94c52fa18c67315b8f7495e30d5e7277ea65d705ea9a779b#npm:10.4.14"],\
+            ["dayjs", "npm:1.11.9"],\
             ["eslint", "npm:8.39.0"],\
             ["eslint-config-next", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:13.3.4"],\
             ["next", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:13.4.5"],\
@@ -656,6 +658,42 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/tanstack__react-query",\
             "react-dom",\
             "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tanstack/react-table", [\
+        ["npm:8.9.3", {\
+          "packageLocation": "./.yarn/cache/@tanstack-react-table-npm-8.9.3-af8d0ec3fb-a71fbbc608.zip/node_modules/@tanstack/react-table/",\
+          "packageDependencies": [\
+            ["@tanstack/react-table", "npm:8.9.3"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:8.9.3", {\
+          "packageLocation": "./.yarn/__virtual__/@tanstack-react-table-virtual-a8725fc929/0/cache/@tanstack-react-table-npm-8.9.3-af8d0ec3fb-a71fbbc608.zip/node_modules/@tanstack/react-table/",\
+          "packageDependencies": [\
+            ["@tanstack/react-table", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:8.9.3"],\
+            ["@tanstack/table-core", "npm:8.9.3"],\
+            ["@types/react", "npm:18.2.0"],\
+            ["@types/react-dom", "npm:18.2.1"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:62697cc128050233f6d429f5d42ee96bd3a5dd3221834aff037ebe1a7bb46a881721859a374aa34c94c52fa18c67315b8f7495e30d5e7277ea65d705ea9a779b#npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tanstack/table-core", [\
+        ["npm:8.9.3", {\
+          "packageLocation": "./.yarn/cache/@tanstack-table-core-npm-8.9.3-993026ff01-52c7e57daa.zip/node_modules/@tanstack/table-core/",\
+          "packageDependencies": [\
+            ["@tanstack/table-core", "npm:8.9.3"]\
           ],\
           "linkType": "HARD"\
         }]\
@@ -1645,6 +1683,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/damerau-levenshtein-npm-1.0.8-bda7311c69-d240b77575.zip/node_modules/damerau-levenshtein/",\
           "packageDependencies": [\
             ["damerau-levenshtein", "npm:1.0.8"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["dayjs", [\
+        ["npm:1.11.9", {\
+          "packageLocation": "./.yarn/cache/dayjs-npm-1.11.9-c47d327b7c-a4844d83dc.zip/node_modules/dayjs/",\
+          "packageDependencies": [\
+            ["dayjs", "npm:1.11.9"]\
           ],\
           "linkType": "HARD"\
         }]\
