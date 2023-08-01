@@ -18,7 +18,6 @@ function DailyPage({params}: Props) {
   const router = useRouter()
   const {isSuccess, data} = useGetDaily(id)
   const {data: todos} = useGetTodo(id)
-  console.log(todos)
   if (!isSuccess) {
     return <div>error...</div>
   }

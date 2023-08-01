@@ -32,7 +32,7 @@ function Timetable({schedules, hourly}: {schedules: Daily['schedule']; hourly: b
   return (
     <div>
       {time.map(item => {
-        const {task} = schedules.find(schedule => schedule.time === `${item.time}:00`) ?? {
+        const {task} = schedules?.find(schedule => schedule.time === `${item.time}:00`) ?? {
           timeId: 0,
           time: '',
           task: '',
