@@ -3,6 +3,13 @@ import {Daily} from '../types/daily'
 import {api} from './api'
 import {dailyKeys} from './queryKey'
 
+export const useGetDailyList = ({year, month}: {year: number; month: number}) => {
+  return useQuery(['monthly', year, month], async () => {
+    const data = await api.get(`/schedule/daily?year=${year}&month=${month}`)
+    return data.json()
+  })
+}
+
 export const useGetDaily = (id: Daily['daily_id']): UseQueryResult<Daily> => {
   return useQuery(dailyKeys.detail(id), async () => {
     const data = await api.get(`/schedule/daily/${id}`)
