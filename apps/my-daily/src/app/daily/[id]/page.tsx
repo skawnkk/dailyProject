@@ -1,12 +1,14 @@
 'use client'
 import {useRouter} from 'next/navigation'
-import React from 'react'
+import React, {useState} from 'react'
 import {useGetDaily} from '../../../api/daily'
 import {useGetTodo} from '../../../api/todo'
+import {useLocalStorage} from '../../../hooks/useLocalStorage'
 import {getDate} from '../../../utils/date'
 import Timetable from './Timetable'
 import TodoInput from './TodoInput'
 import TodoList from './TodoList'
+import Toggle from './Toggle'
 
 interface Props {
   params: {
@@ -16,6 +18,8 @@ interface Props {
 function DailyPage({params}: Props) {
   const {id} = params
   const router = useRouter()
+  const {getLocalStorage, setLocalStorage} = useLocalStorage()
+  const [isHourly, setIsHourly] = useState(getLocalStorage('isHourly') === 'Y')
   const {isSuccess, data} = useGetDaily(id)
   const {data: todos} = useGetTodo(id)
   if (!isSuccess) {
@@ -26,6 +30,10 @@ function DailyPage({params}: Props) {
   }
   const {date: dailyDate, keep, problem, try: tryData, schedule} = data
   const {month, date} = getDate(new Date(dailyDate))
+  const toggleTimetable = (checked: boolean) => {
+    setIsHourly(checked)
+    setLocalStorage({id: 'isHourly', value: checked ? 'Y' : 'N'})
+  }
   return (
     <div>
       <div className={'flex'}>
@@ -51,9 +59,12 @@ function DailyPage({params}: Props) {
           <TodoInput />
         </div>
       </div>
-      <div className={'flex'}>
-        <p>시간체크</p>
-        <Timetable schedules={schedule} hourly={false} />
+      <div>
+        <div className="flex flex-1 justify-between">
+          <p>시간체크</p>
+          <Toggle on={isHourly} onChange={toggleTimetable} />
+        </div>
+        <Timetable schedules={schedule} hourly={isHourly} />
       </div>
     </div>
   )
