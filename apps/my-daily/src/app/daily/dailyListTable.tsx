@@ -1,21 +1,24 @@
-import {log} from 'console'
-import {createColumnHelper, flexRender, getCoreRowModel, useReactTable} from '@tanstack/react-table'
 import dayjs, {Dayjs} from 'dayjs'
 import {useRouter} from 'next/navigation'
 import React from 'react'
 import {useGetDailyList} from '../../api/daily'
-import {Daily} from '../../types/daily'
-import {getDate, getDay} from '../../utils/date'
-type ColumnType = {
-  [key: string]: Daily
-}
+import {getDay} from '../../utils/date'
 
 function DailyListTable({year, month}) {
   const router = useRouter()
+  const dayCount = dayjs(`${year}-${month}-1`).daysInMonth()
+  const calendar = ((): Dayjs[] => {
+    const result: Dayjs[] = []
+    for (let i = 0; i < dayCount; i++) {
+      result.push(dayjs(`${year}-${month}-${i + 1}`))
+    }
+    return result
+  })()
+  const properties = ['keep', 'problem', 'try']
   const {data: dailyList, isLoading} = useGetDailyList({year, month})
 
-  const goDailyPage = (date: Date) => () => {
-    const targetDate = new Date(date).getDate()
+  const goDailyPage = (date: Dayjs) => () => {
+    const targetDate = date.date()
     const daily = dailyList.find(list => new Date(list.date).getDate() === targetDate)
     router.push(
       daily
@@ -24,37 +27,45 @@ function DailyListTable({year, month}) {
     )
   }
 
-  const columnHelper = createColumnHelper<{property: string} & ColumnType>()
-  const dayCount = dayjs(`${year}-${month + 1}-1`).daysInMonth()
-  const calendar = ((): Dayjs[] => {
-    const result: Dayjs[] = []
-    for (let i = 0; i < dayCount; i++) {
-      result.push(dayjs(`${year}-${month}-${i + 1}`))
-    }
-    return result
-  })()
-  const columns = [
-    columnHelper.accessor('property', {
-      cell: info => info.getValue(),
-      header: () => <span>*</span>,
-    }),
-    ...calendar.map(date => {
-      return columnHelper.accessor(`${date.date()}`, {
-        cell: info => info.getValue(),
-        header: () => (
-          <div className="text-sm font-normal flex flex-1 whitespace-nowrap" onClick={goDailyPage(date)}>
-            {date.date()}일({getDay(date.day())})
-          </div>
-        ),
-      })
-    }),
-  ]
+  const DateHeader = () => {
+    return (
+      <div className="flex gap-2">
+        <div className="text-sm font-normal flex flex-1 whitespace-nowrap min-w-[80px] justify-center sticky left-0 border-r bg-white bg-opacity-50 backdrop-blur-md">
+          ⛳️
+        </div>
 
-  const table = useReactTable({
-    data: dailyList,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  })
+        {calendar.map(date => {
+          return (
+            <div
+              key={date.toString()}
+              className="text-sm font-normal flex flex-1 whitespace-nowrap min-w-[80px] justify-center"
+              onClick={goDailyPage(date)}
+            >
+              {date.date()}일({getDay(date.day())})
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
+  const PropertyBody = ({id}: {id: string}) => {
+    return (
+      <div className="flex gap-2">
+        <div className={'min-w-[80px] sticky left-0 border-r bg-white bg-opacity-50 backdrop-blur-md'}>
+          <div>{id}</div>
+        </div>
+
+        {calendar.map(date => {
+          const validItem = dailyList.find(li => dayjs(li.date).isSame(dayjs(date)))
+          return (
+            <div key={`${id}_${date}`} className={'min-w-[80px] text-xs text-gray-500'}>
+              {validItem ? <div>{validItem[id]}</div> : <div>-</div>}
+            </div>
+          )
+        })}
+      </div>
+    )
+  }
 
   if (isLoading) {
     return <div>Loading</div>
@@ -62,44 +73,10 @@ function DailyListTable({year, month}) {
 
   return (
     <div className="overflow-auto">
-      <table>
-        <thead>
-          {table.getHeaderGroups().map(headerGroup => (
-            <tr key={headerGroup.id}>
-              {headerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map(row => (
-            <tr key={row.id}>
-              {row.getVisibleCells().map(cell => (
-                <td key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        <tfoot>
-          {table.getFooterGroups().map(footerGroup => (
-            <tr key={footerGroup.id}>
-              {footerGroup.headers.map(header => (
-                <th key={header.id}>
-                  {header.isPlaceholder ? null : flexRender(header.column.columnDef.footer, header.getContext())}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </tfoot>
-      </table>
-
-      {/* {dailyList?.map(list => {
-        const {month, date} = getDate(new Date(list.date))
-        return <div key={list.dailyId} onClick={goDailyPage(list.dailyId)}>{`${month}월 ${date}일`}</div>
-      })} */}
+      <DateHeader />
+      {properties.map(property => {
+        return <PropertyBody id={property} key={property} />
+      })}
     </div>
   )
 }
