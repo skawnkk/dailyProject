@@ -1,6 +1,4 @@
-import {useParams} from 'next/navigation'
 import {useRef} from 'react'
-import {useUpdateSchedule} from '../../../api/daily'
 import {Daily} from '../../../types/daily'
 
 type ScheduleTimeType = {
@@ -8,7 +6,15 @@ type ScheduleTimeType = {
   text: string
 }
 
-function Timetable({schedules, hourly}: {schedules: Daily['schedule']; hourly: boolean}) {
+function Timetable({
+  schedules,
+  hourly,
+  onChange,
+}: {
+  schedules: Daily['schedule']
+  hourly: boolean
+  onChange: (time, value) => void
+}) {
   const generateTimeRange = (hour: number, minute: number, nextHour: number, nextMinute: number): ScheduleTimeType => {
     const startTime = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
     const endTime = `${nextHour.toString().padStart(2, '0')}:${nextMinute.toString().padStart(2, '0')}`
@@ -34,12 +40,12 @@ function Timetable({schedules, hourly}: {schedules: Daily['schedule']; hourly: b
     <>
       {hourly ? (
         <div className={'flex flex-1'}>
-          <TimeTableLine schedules={schedules} time={time} />
+          <TimeTableLine schedules={schedules} time={time} onChange={onChange} />
         </div>
       ) : (
         <div className={'flex flex-1'}>
-          <TimeTableLine schedules={schedules} time={time.slice(0, time.length / 2)} />
-          <TimeTableLine schedules={schedules} time={time.slice(time.length / 2)} />
+          <TimeTableLine schedules={schedules} time={time.slice(0, time.length / 2)} onChange={onChange} />
+          <TimeTableLine schedules={schedules} time={time.slice(time.length / 2)} onChange={onChange} />
         </div>
       )}
     </>
@@ -48,17 +54,15 @@ function Timetable({schedules, hourly}: {schedules: Daily['schedule']; hourly: b
 
 export default Timetable
 
-const TimeCell = ({time, task}: {time: string; task: string}) => {
+const TimeCell = ({time, task, onChange}: {time: string; task: string; onChange: (time, value) => void}) => {
   const ref = useRef<HTMLInputElement>(null)
-  const {id} = useParams()
-  const mutation = useUpdateSchedule(id)
   const submitSchedule = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     updateSchedule()
   }
 
   const updateSchedule = () => {
-    mutation.mutate({time, schedule: ref.current?.value || ''})
+    onChange(time, ref.current?.value)
   }
 
   return (
@@ -70,7 +74,15 @@ const TimeCell = ({time, task}: {time: string; task: string}) => {
   )
 }
 
-const TimeTableLine = ({time, schedules}: {time: ScheduleTimeType[]; schedules: Daily['schedule']}) => {
+const TimeTableLine = ({
+  time,
+  schedules,
+  onChange,
+}: {
+  time: ScheduleTimeType[]
+  schedules: Daily['schedule']
+  onChange: (time, value) => void
+}) => {
   return (
     <div className={'flex flex-col flex-1'}>
       {time.map(item => {
@@ -82,7 +94,7 @@ const TimeTableLine = ({time, schedules}: {time: ScheduleTimeType[]; schedules: 
         return (
           <div key={item.time} className="flex gap-2 justify-between border-b dark:border-neutral-500 text-sm">
             <div className="whitespace-nowrap p-[3px] min-w-[110px] max-w-[110px] text-center">{item.text}</div>
-            <TimeCell key={item.time} time={item.time} task={task} />
+            <TimeCell key={item.time} time={item.time} task={task} onChange={onChange} />
           </div>
         )
       })}

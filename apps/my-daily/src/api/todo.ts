@@ -4,9 +4,16 @@ import {api} from './api'
 import {todoKeys} from './queryKey'
 
 export const useGetTodo = (dailyId: string): UseQueryResult<Todo[]> => {
-  return useQuery(todoKeys.get(dailyId), async () => {
-    const data = await api.get(`/todo/${dailyId}`)
-    return data.json()
+  return useQuery({
+    queryKey: todoKeys.get(dailyId ?? ''),
+    queryFn: async () => {
+      if (dailyId === 'create') {
+        return []
+      }
+      const data = await api.get(`/todo/${dailyId}`)
+      return data.json()
+    },
+    initialData: [],
   })
 }
 
