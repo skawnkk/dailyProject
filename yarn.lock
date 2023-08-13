@@ -70,6 +70,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@headlessui/react@npm:^1.7.16":
+  version: 1.7.16
+  resolution: "@headlessui/react@npm:1.7.16"
+  dependencies:
+    client-only: ^0.0.1
+  peerDependencies:
+    react: ^16 || ^17 || ^18
+    react-dom: ^16 || ^17 || ^18
+  checksum: 85844c96c79796236fa7dec2f1c2f0332d7554d9b785d7b37d9762bb4133088a0cf1334653d6f91c1fe4619960eb569f14ba5f6a962c3305e03f7b362acbabbe
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/config-array@npm:^0.11.8":
   version: 0.11.8
   resolution: "@humanwhocodes/config-array@npm:0.11.8"
@@ -148,6 +160,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@my-daily/app@workspace:apps/my-daily"
   dependencies:
+    "@headlessui/react": ^1.7.16
     "@my/lib": "workspace:^"
     "@my/ui": "workspace:^"
     "@tanstack/eslint-plugin-query": ^4.29.9
@@ -158,6 +171,7 @@ __metadata:
     "@types/react": 18.2.0
     "@types/react-dom": 18.2.1
     autoprefixer: 10.4.14
+    classnames: ^2.3.2
     dayjs: ^1.11.9
     eslint: 8.39.0
     eslint-config-next: 13.3.4
@@ -1162,6 +1176,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"classnames@npm:^2.3.2":
+  version: 2.3.2
+  resolution: "classnames@npm:2.3.2"
+  checksum: 2c62199789618d95545c872787137262e741f9db13328e216b093eea91c85ef2bfb152c1f9e63027204e2559a006a92eb74147d46c800a9f96297ae1d9f96f4e
+  languageName: node
+  linkType: hard
+
 "clean-stack@npm:^2.0.0":
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
@@ -1169,7 +1190,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"client-only@npm:0.0.1":
+"client-only@npm:0.0.1, client-only@npm:^0.0.1":
   version: 0.0.1
   resolution: "client-only@npm:0.0.1"
   checksum: 0c16bf660dadb90610553c1d8946a7fdfb81d624adea073b8440b7d795d5b5b08beb3c950c6a2cf16279365a3265158a236876d92bce16423c485c322d7dfaf8

@@ -16,9 +16,21 @@ function TodoInput() {
 
   return (
     <div>
-      <form onSubmit={addTodo}>
-        <input placeholder="오늘 해야 할 일을 입력하세요." />
-        <button type="submit">+</button>
+      <form className="flex gap-1" onSubmit={addTodo}>
+        <input
+          className={
+            'bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full p-2 text-gray-700 text-sm font-light leading-tight focus:outline-none focus:bg-white focus:border-cyan-400'
+          }
+          placeholder="오늘 해야 할 일을 입력하세요."
+        />
+        <button
+          className={
+            'flex-shrink-0 bg-cyan-400 hover:bg-cyan-500 border-cyan-400 hover:border-cyan-500 text-sm border-4 text-white py-1 px-2 rounded'
+          }
+          type="submit"
+        >
+          +
+        </button>
       </form>
     </div>
   )

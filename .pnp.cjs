@@ -149,6 +149,33 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
+      ["@headlessui/react", [\
+        ["npm:1.7.16", {\
+          "packageLocation": "./.yarn/cache/@headlessui-react-npm-1.7.16-039d64d731-85844c96c7.zip/node_modules/@headlessui/react/",\
+          "packageDependencies": [\
+            ["@headlessui/react", "npm:1.7.16"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:1.7.16", {\
+          "packageLocation": "./.yarn/__virtual__/@headlessui-react-virtual-a24670c810/0/cache/@headlessui-react-npm-1.7.16-039d64d731-85844c96c7.zip/node_modules/@headlessui/react/",\
+          "packageDependencies": [\
+            ["@headlessui/react", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:1.7.16"],\
+            ["@types/react", "npm:18.2.0"],\
+            ["@types/react-dom", "npm:18.2.1"],\
+            ["client-only", "npm:0.0.1"],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:62697cc128050233f6d429f5d42ee96bd3a5dd3221834aff037ebe1a7bb46a881721859a374aa34c94c52fa18c67315b8f7495e30d5e7277ea65d705ea9a779b#npm:18.2.0"]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react",\
+            "react-dom",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
       ["@humanwhocodes/config-array", [\
         ["npm:0.11.8", {\
           "packageLocation": "./.yarn/cache/@humanwhocodes-config-array-npm-0.11.8-7955bfecc2-0fd6b3c54f.zip/node_modules/@humanwhocodes/config-array/",\
@@ -241,6 +268,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./apps/my-daily/",\
           "packageDependencies": [\
             ["@my-daily/app", "workspace:apps/my-daily"],\
+            ["@headlessui/react", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:1.7.16"],\
             ["@my/lib", "workspace:packages/lib"],\
             ["@my/ui", "workspace:packages/ui"],\
             ["@tanstack/eslint-plugin-query", "npm:4.29.9"],\
@@ -251,6 +279,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@types/react", "npm:18.2.0"],\
             ["@types/react-dom", "npm:18.2.1"],\
             ["autoprefixer", "virtual:62697cc128050233f6d429f5d42ee96bd3a5dd3221834aff037ebe1a7bb46a881721859a374aa34c94c52fa18c67315b8f7495e30d5e7277ea65d705ea9a779b#npm:10.4.14"],\
+            ["classnames", "npm:2.3.2"],\
             ["dayjs", "npm:1.11.9"],\
             ["eslint", "npm:8.39.0"],\
             ["eslint-config-next", "virtual:a013c13f4766d67dde55f0136525cf651833d8cc8a7aa53429977d7a3814ab5c5047400c87870f0b7ae74764b12826aba7b26eb7b4cbf448e9d9878bb9d82252#npm:13.3.4"],\
@@ -1561,6 +1590,15 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageLocation": "./.yarn/cache/chownr-npm-2.0.0-638f1c9c61-c57cf9dd07.zip/node_modules/chownr/",\
           "packageDependencies": [\
             ["chownr", "npm:2.0.0"]\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["classnames", [\
+        ["npm:2.3.2", {\
+          "packageLocation": "./.yarn/cache/classnames-npm-2.3.2-d2fdae468d-2c62199789.zip/node_modules/classnames/",\
+          "packageDependencies": [\
+            ["classnames", "npm:2.3.2"]\
           ],\
           "linkType": "HARD"\
         }]\

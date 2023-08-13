@@ -17,8 +17,8 @@ function TodoList({list}: {list: Daily['todos']}) {
   return (
     <div>
       {list.map(li => (
-        <div key={li.todoId} className={'flex'}>
-          <div>
+        <div key={li.todoId} className={'flex gap-1'}>
+          <div className={'flex gap-1'}>
             <input
               type="checkbox"
               id={li.todo}
@@ -26,9 +26,13 @@ function TodoList({list}: {list: Daily['todos']}) {
               checked={li.done === 'Y'}
               onChange={changeCheck(li.todoId)}
             />
-            <label htmlFor={li.todo}>{li.todo}</label>
+            <label className={'text-sm'} htmlFor={li.todo}>
+              {li.todo}
+            </label>
           </div>
-          <div onClick={deleteTodo(li.todoId)}>x</div>
+          <div className={'leading-none'} onClick={deleteTodo(li.todoId)}>
+            ×
+          </div>
         </div>
       ))}
     </div>

@@ -12,6 +12,15 @@ export const api = {
       body: JSON.stringify(body),
     })
   },
+  put: async (url: string, body: unknown) => {
+    return fetch(baseUrl + url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(body),
+    })
+  },
   delete: async (url: string) => {
     return fetch(baseUrl + url, {
       method: 'DELETE',
