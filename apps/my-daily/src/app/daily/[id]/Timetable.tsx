@@ -33,11 +33,11 @@ function Timetable({schedules, hourly}: {schedules: Daily['schedule']; hourly: b
   return (
     <>
       {hourly ? (
-        <div>
+        <div className={'flex flex-1'}>
           <TimeTableLine schedules={schedules} time={time} />
         </div>
       ) : (
-        <div className="flex">
+        <div className={'flex flex-1'}>
           <TimeTableLine schedules={schedules} time={time.slice(0, time.length / 2)} />
           <TimeTableLine schedules={schedules} time={time.slice(time.length / 2)} />
         </div>
@@ -64,16 +64,15 @@ const TimeCell = ({time, task}: {time: string; task: string}) => {
   return (
     <div className="flex flex-1">
       <form onSubmit={submitSchedule}>
-        <input ref={ref} defaultValue={task} onBlur={updateSchedule} />
+        <input className="h-full p-2" ref={ref} defaultValue={task} onBlur={updateSchedule} />
       </form>
     </div>
   )
 }
 
 const TimeTableLine = ({time, schedules}: {time: ScheduleTimeType[]; schedules: Daily['schedule']}) => {
-  console.log(time)
   return (
-    <div>
+    <div className={'flex flex-col flex-1'}>
       {time.map(item => {
         const {task} = schedules?.find(schedule => schedule.time === `${item.time}:00`) ?? {
           timeId: 0,
@@ -81,8 +80,8 @@ const TimeTableLine = ({time, schedules}: {time: ScheduleTimeType[]; schedules: 
           task: '',
         }
         return (
-          <div key={item.time} className="flex gap-2 justify-between">
-            <div>{item.text}</div>
+          <div key={item.time} className="flex gap-2 justify-between border-b dark:border-neutral-500 text-sm">
+            <div className="whitespace-nowrap p-[3px] min-w-[110px] max-w-[110px] text-center">{item.text}</div>
             <TimeCell key={item.time} time={item.time} task={task} />
           </div>
         )

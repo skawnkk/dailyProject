@@ -8,7 +8,7 @@ export default function Toggle({on, onChange}: {on: boolean; onChange: (checked:
     <Switch
       checked={on}
       onChange={handleChange}
-      className={`${on ? 'bg-blue-600' : 'bg-gray-200'}  inline-flex h-6 w-11 items-center rounded-full`}
+      className={`${on ? 'bg-cyan-400' : 'bg-gray-200'}  inline-flex h-6 w-11 items-center rounded-full`}
     >
       <span className="sr-only">Enable notifications</span>
       <span
