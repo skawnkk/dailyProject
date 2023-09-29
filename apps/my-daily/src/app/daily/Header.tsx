@@ -8,7 +8,7 @@ function Header() {
   const query = useSearchParams()
   const [month, date] = [query.get('month'), query.get('date')]
   return (
-    <div className="sticky top-0 left-0 right-0 flex gap-2 p-[20px] border-b bg-white bg-opacity-50 backdrop-blur-md">
+    <div className="sticky top-0 left-0 right-0 flex gap-2 p-[20px] border-b bg-white bg-opacity-50">
       <Link href={'/daily'}>DAILY PLAN</Link>
       {id && (
         <>
